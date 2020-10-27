@@ -1,48 +1,36 @@
 <!DOCTYPE html>
-<html lang="en-US">
-	<head>
-		<title>Amazon Connect</title>
-        <meta charset="UTF-8"> 
-		<script src="amazon-connect.min.js"></script> 
-        <style>
-            *, body {
-                margin: 0;
-                padding:0
-            }
-            iframe {
-                border: 0px
-            }
-            #containerDiv {
-                width: 320px;
-                height: 465px
-            }
-        </style>
-	</head>
-	<body>
-        <div id="containerDiv"></div>
-		<script>
-            /*************** Begin Mod Area ***************/
-
-            /* Edit the instanceName below with your instance alias */
-            var instanceName = "chevonie2";
-
-            /*************** End Mod Area ***************/
-			connect.core.initCCP(containerDiv, {
-                ccpUrl:"https://" + instanceName + ".awsapps.com/connect/login",
-                loginPopup: true,
-                softphone: {
-                    allowFramedSoftphone: true
-                 }
-			});
-            connect.contact(function(contact) {
-                contact.onConnecting(function(contact) {
-                    var attributeMap = contact.getAttributes();
-                    var baseURL = attributeMap.screenPopURL.value;
-                    var searchString = attributeMap.screenPopValue.value;
-                    var screenpopURL = baseURL + searchString;
-                    window.open(screenpopURL)
-                });
-            });
-		</script>
-	</body>
+<meta charset="UTF-8">
+<html>
+  <head>
+    <script type="text/javascript" src="amazon-connect-1.4.js"></script>
+  </head>
+  <!-- Add the call to init() as an onload so it will only run once the page is loaded -->
+  <body onload="init()">
+    <div id="containerDiv" style="width: 400px;height: 800px;"></div>
+    <script type="text/javascript">
+      var instanceURL = "https://chevonie.awsapps.com/connect/ccp-v2/";
+      // initialize the streams api
+      function init() {
+        // initialize the ccp
+        connect.core.initCCP(containerDiv, {
+          ccpUrl: instanceURL,            // REQUIRED
+          loginPopup: true,               // optional, defaults to `true`
+          loginPopupAutoClose: true,      // optional, defaults to `true`
+          loginOptions: {                 // optional, if provided opens login in new window
+            autoClose: true,              // optional, defaults to `false`
+            height: 600,                  // optional, defaults to 578
+            width: 400,                   // optional, defaults to 433
+            top: 0,                       // optional, defaults to 0
+            left: 0                       // optional, defaults to 0
+          },
+          region: "eu-central-1",         // REQUIRED for `CHAT`, optional otherwise
+          softphone: {                    // optional
+            allowFramedSoftphone: true,   // optional
+            disableRingtone: false,       // optional
+            ringtoneUrl: "./ringtone.mp3" // optional
+           }
+         });
+      }
+    </script>
+  </body>
 </html>
